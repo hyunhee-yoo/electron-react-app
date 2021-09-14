@@ -3,24 +3,45 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@stitches/react": "^1.1.0",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
+    "electron": "^14.0.1",
+    "electron-is-dev": "^2.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-scripts": "4.0.3",
     "web-vitals": "^1.0.1"
   },
+  "homepage": "./",
+  "main": "public/main.js",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "react:start": "react-scripts start",
+    "react:build": "react-scripts build",
+    "react:test": "react-scripts test",
+    "react:eject": "react-scripts eject",
+    "electron:start": "wait-on http://localhost:3000 && electron .",
+    "start": "concurrently \"yarn react:start\" \"yarn electron:start\"",
+    "storybook": "start-storybook -p 6006 -s public",
+    "build-storybook": "build-storybook -s public",
+    "lint:fix": "eslint --fix",
+    "build": "yarn react:build && electron-builder --publish=always"
   },
   "eslintConfig": {
     "extends": [
       "react-app",
       "react-app/jest"
+    ],
+    "overrides": [
+      {
+        "files": [
+          "**/*.stories.*"
+        ],
+        "rules": {
+          "import/no-anonymous-default-export": "off"
+        }
+      }
     ]
   },
   "browserslist": {
@@ -34,5 +55,32 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@storybook/addon-actions": "^6.4.0-alpha.35",
+    "@storybook/addon-essentials": "^6.4.0-alpha.35",
+    "@storybook/addon-links": "^6.4.0-alpha.35",
+    "@storybook/node-logger": "^6.4.0-alpha.35",
+    "@storybook/preset-create-react-app": "^3.2.0",
+    "@storybook/react": "^6.4.0-alpha.35",
+    "concurrently": "^6.2.1",
+    "electron-builder": "^22.11.7",
+    "electron-devtools-installer": "^3.2.0",
+    "eslint": "^7.32.0",
+    "eslint-plugin-react": "^7.25.1",
+    "wait-on": "^6.0.0"
+  },
+  "resolutions": {
+    "babel-loader": "8.1.0"
+  },
+  "build": {
+    "appId": "com.sample.electron-react-app",
+    "files": [
+      "build/**/*",
+      "node_modules/**/*"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    }
   }
 }
